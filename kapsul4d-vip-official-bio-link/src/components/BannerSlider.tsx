@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Sparkles, Image as ImageIcon, Upload, Check, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { BannerItem } from '../types';
 
 interface BannerSliderProps {
@@ -33,85 +33,6 @@ export const defaultBanners: BannerItem[] = [
     linkUrl: 'https://cepatakses.info/login-kapsul4d',
   },
 ];
-
-export const BannerSlider: React.FC<BannerSliderProps> = ({ banners: initialBanners, onUpdateBanners }) => {
-  const [banners, setBanners] = useState<BannerItem[]>(initialBanners.length > 0 ? initialBanners : defaultBanners);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [showPhotoModal, setShowPhotoModal] = useState(false);
-  const [inputUrl, setInputUrl] = useState('');
-  const [uploadFeedback, setUploadFeedback] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Auto-slide effect (lightweight timer)
-  useEffect(() => {
-    if (isHovered || banners.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % banners.length);
-    }, 4500);
-    return () => clearInterval(interval);
-  }, [banners.length, isHovered]);
-
-  const handlePrev = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    setCurrentIndex((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
-  };
-
-  const handleNext = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % banners.length);
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        if (result) {
-          const updated = [...banners];
-          updated[currentIndex] = {
-            ...updated[currentIndex],
-            url: result,
-          };
-          setBanners(updated);
-          onUpdateBanners?.(updated);
-          setUploadFeedback('Foto berhasil dimasukkan & langsung otomatis menyatu!');
-          setTimeout(() => {
-            setUploadFeedback(null);
-            setShowPhotoModal(false);
-          }, 1500);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleUrlSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputUrl.trim()) return;
-    const updated = [...banners];
-    updated[currentIndex] = {
-      ...updated[currentIndex],
-      url: inputUrl.trim(),
-    };
-    setBanners(updated);
-    onUpdateBanners?.(updated);
-    setInputUrl('');
-    setUploadFeedback('Foto URL berhasil dipasang!');
-    setTimeout(() => {
-      setUploadFeedback(null);
-      setShowPhotoModal(false);
-    }, 1500);
-  };
-
-  const handleResetBanners = () => {
-    setBanners(defaultBanners);
-    onUpdateBanners?.(defaultBanners);
-    setShowPhotoModal(false);
-  };
-
-  const currentBanner = banners[currentIndex] || banners[0];
 
   return (
     <div className="w-full relative my-3">
@@ -214,7 +135,24 @@ export const BannerSlider: React.FC<BannerSliderProps> = ({ banners: initialBann
           ))}
         </div>
       )}
-            <p className="text-xs text-slate-300">
+             {/* Lightweight Modal to insert custom photo & verify responsive auto-fit */}
+      {showPhotoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-slate-900 border border-cyan-500/50 rounded-2xl p-5 shadow-[0_0_35px_rgba(6,182,212,0.3)] space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="w-5 h-5 text-cyan-400" />
+                <h4 className="text-base font-bold text-white">Masukkan Foto Banner</h4>
+              </div>
+              <button
+                onClick={() => setShowPhotoModal(false)}
+                className="text-slate-400 hover:text-white text-sm font-semibold p-1"
+              >
+                ✕
+              </button>
+            </div>
+ 
+      <p className="text-xs text-slate-300">
               Foto dalam ukuran apapun (portrait, square, atau landscape) akan{' '}
               <span className="text-cyan-400 font-semibold">langsung menyatu otomatis</span> dan responsif menyesuaikan frame tanpa distorsi.
             </p>

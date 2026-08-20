@@ -214,24 +214,6 @@ export const BannerSlider: React.FC<BannerSliderProps> = ({ banners: initialBann
           ))}
         </div>
       )}
-
-      {/* Lightweight Modal to insert custom photo & verify responsive auto-fit */}
-      {showPhotoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-md bg-slate-900 border border-cyan-500/50 rounded-2xl p-5 shadow-[0_0_35px_rgba(6,182,212,0.3)] space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2">
-                <ImageIcon className="w-5 h-5 text-cyan-400" />
-                <h4 className="text-base font-bold text-white">Masukkan Foto Banner</h4>
-              </div>
-              <button
-                onClick={() => setShowPhotoModal(false)}
-                className="text-slate-400 hover:text-white text-sm font-semibold p-1"
-              >
-                ✕
-              </button>
-            </div>
-
             <p className="text-xs text-slate-300">
               Foto dalam ukuran apapun (portrait, square, atau landscape) akan{' '}
               <span className="text-cyan-400 font-semibold">langsung menyatu otomatis</span> dan responsif menyesuaikan frame tanpa distorsi.

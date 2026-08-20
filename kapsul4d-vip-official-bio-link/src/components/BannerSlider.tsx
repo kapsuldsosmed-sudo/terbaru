@@ -7,30 +7,30 @@ interface BannerSliderProps {
   onUpdateBanners?: (banners: BannerItem[]) => void;
 }
 
-const defaultBanners: BannerItem[] = [
+export const defaultBanners: BannerItem[] = [
   {
     id: '1',
-    title: 'PROMO MEMBER BARU BONUS 100%',
-    subtitle: 'Klaim Bonus Tanpa Ribet • Layanan Prioritas 24 Jam Nonstop',
-    url: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=1200&q=80',
-    link: 'https://directlink-register.com',
-    badge: 'HOT PROMO',
+    title: 'KAPSUL4D VIP OFFICIAL',
+    subtitle: 'Akses Prioritas 24 Jam Nonstop & Garansi Kecepatan Tinggi',
+    badge: 'RESMI & TERPERCAYA',
+    url: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80',
+    linkUrl: '#daftar',
   },
   {
     id: '2',
-    title: 'EVENT PETIR MERAH & BOM EMAS',
-    subtitle: 'Sensasi Kemenangan Maksimal Setiap Putaran Hari Ini',
-    url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80',
-    link: 'https://directlink-login.com',
-    badge: 'POPULER',
+    title: 'PROMO BONUS HARIAN VIP',
+    subtitle: 'Nikmati Layanan Eksklusif dengan Rasio Kemenangan Terbaik',
+    badge: 'EVENT SPESIAL',
+    url: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80',
+    linkUrl: '#login',
   },
   {
     id: '3',
-    title: 'DEPOSIT QRIS INSTAN & KILAT',
-    subtitle: 'Proses Otomatis Hitungan Detik Tanpa Potongan 24 Jam',
-    url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80',
-    link: 'https://directlink-register.com',
-    badge: 'TERCEPAT',
+    title: 'SERVER ULTRA SPEED 2026',
+    subtitle: 'Enkripsi SSL 256-Bit & Jalur Akses Bebas Blokir',
+    badge: 'FAST RESPONSE',
+    url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80',
+    linkUrl: '#livechat',
   },
 ];
 
@@ -39,121 +39,103 @@ export const BannerSlider: React.FC<BannerSliderProps> = ({ banners: initialBann
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
+  // Auto-slide effect (lightweight timer)
   useEffect(() => {
     if (isHovered || banners.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % banners.length);
     }, 4500);
     return () => clearInterval(interval);
-  }, [isHovered, banners.length]);
+  }, [banners.length, isHovered]);
 
-  const handlePrev = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentIndex((prev) => (prev - 1 + banners.length) % banners.length);
+  const handlePrev = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setCurrentIndex((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
   };
 
-  const handleNext = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleNext = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     setCurrentIndex((prev) => (prev + 1) % banners.length);
   };
 
   const currentBanner = banners[currentIndex] || banners[0];
 
   return (
-    <div
-      id="banner-slider"
-      className="relative w-full overflow-hidden rounded-2xl border border-cyan-500/30 bg-slate-900/60 shadow-[0_0_25px_rgba(6,182,212,0.15)] group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* 16:9 Aspect Ratio Container */}
-      <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] max-h-[300px] overflow-hidden bg-slate-950 flex items-center justify-center">
-        {/* Background Image */}
+    <div className="w-full relative my-3">
+      {/* Banner Container with Seamless Adaptive Framing */}
+      <div
+        className="group relative w-full aspect-[16/8] sm:aspect-[16/7] rounded-2xl overflow-hidden border border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.25)] bg-slate-950 transition-all duration-300 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <img
+          key={currentBanner.id + '-' + currentIndex}
           src={currentBanner.url}
           alt={currentBanner.title}
+          className="w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-105"
           referrerPolicy="no-referrer"
-          className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+          loading="eager"
         />
 
-        {/* Ambient Dark Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/80" />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-slate-950/40 pointer-events-none" />
+        <div className="absolute inset-0 border border-cyan-400/20 rounded-2xl pointer-events-none" />
 
-        {/* Content Overlay */}
-        <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-between z-10 pointer-events-none">
-          {/* Top Badge */}
-          <div className="flex items-center justify-between">
+        {/* Banner Content Overlay */}
+        <div className="absolute inset-0 p-4 sm:p-5 flex flex-col justify-between pointer-events-none">
+          <div className="flex items-center justify-between w-full">
             {currentBanner.badge && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 backdrop-blur-md shadow-[0_0_10px_rgba(6,182,212,0.3)]">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold tracking-wider uppercase bg-cyan-950/80 text-cyan-300 border border-cyan-500/50 backdrop-blur-md shadow-[0_0_10px_rgba(6,182,212,0.3)]">
                 <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
                 {currentBanner.badge}
               </span>
             )}
           </div>
 
-          {/* Bottom Title & Subtitle */}
-          <div className="space-y-1 sm:space-y-1.5 max-w-xl">
-            <h3 className="text-base sm:text-lg md:text-xl font-black text-white tracking-wide uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] line-clamp-1">
+          <div className="space-y-0.5 sm:space-y-1">
+            <h3 className="text-sm sm:text-lg font-black text-white tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] leading-tight">
               {currentBanner.title}
             </h3>
-            <p className="text-xs sm:text-sm text-slate-200 font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)] line-clamp-1">
-              {currentBanner.subtitle}
-            </p>
+            {currentBanner.subtitle && (
+              <p className="text-[11px] sm:text-xs text-cyan-100/90 font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] line-clamp-1">
+                {currentBanner.subtitle}
+              </p>
+            )}
           </div>
         </div>
 
-        {/* Clickable full banner action */}
-        {currentBanner.link && (
-          <a
-            href={currentBanner.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="absolute inset-0 z-15"
-            aria-label={currentBanner.title}
-          />
+        {banners.length > 1 && (
+          <>
+            <button
+              onClick={handlePrev}
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-900/70 text-cyan-300 border border-cyan-500/40 flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-cyan-500 hover:text-slate-950 active:scale-95 shadow-lg"
+              aria-label="Previous Banner"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-900/70 text-cyan-300 border border-cyan-500/40 flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-cyan-500 hover:text-slate-950 active:scale-95 shadow-lg"
+              aria-label="Next Banner"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </>
         )}
       </div>
 
-      {/* Navigation Arrows */}
       {banners.length > 1 && (
-        <>
-          <button
-            type="button"
-            onClick={handlePrev}
-            aria-label="Previous Slide"
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-slate-950/70 border border-cyan-500/30 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-cyan-500 hover:text-slate-950 hover:scale-110 active:scale-95 shadow-md"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
-            aria-label="Next Slide"
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-slate-950/70 border border-cyan-500/30 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-cyan-500 hover:text-slate-950 hover:scale-110 active:scale-95 shadow-md"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </>
-      )}
-
-      {/* Dots Indicator */}
-      {banners.length > 1 && (
-        <div className="absolute bottom-2.5 right-4 z-20 flex items-center gap-1.5 bg-slate-950/60 backdrop-blur-sm px-2 py-1 rounded-full border border-slate-800">
-          {banners.map((_, index) => (
+        <div className="flex items-center justify-center gap-1.5 mt-2">
+          {banners.map((_, idx) => (
             <button
-              key={index}
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setCurrentIndex(index);
-              }}
-              aria-label={`Go to slide ${index + 1}`}
+              key={idx}
+              onClick={() => setCurrentIndex(idx)}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                currentIndex === index
-                  ? 'w-5 bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]'
-                  : 'w-1.5 bg-slate-600 hover:bg-slate-400'
+                idx === currentIndex
+                  ? 'w-6 bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]'
+                  : 'w-1.5 bg-slate-700 hover:bg-slate-500'
               }`}
+              aria-label={`Slide ${idx + 1}`}
             />
           ))}
         </div>
